@@ -10,9 +10,11 @@
     '/js/draco/draco_decoder.wasm'
   ];
   var criticalAssetPromises = [];
+  var mobileProgress = 0;
 
   function setMobileProgress(value) {
-    var progress = Math.max(0, Math.min(100, Math.round(value)));
+    mobileProgress = Math.max(mobileProgress, Math.max(0, Math.min(100, value)));
+    var progress = mobileProgress >= 100 ? 100 : Math.floor(mobileProgress);
     root.style.setProperty('--local-loading-progress', progress + '%');
     root.setAttribute('data-local-loading-label', 'LOADING ' + progress + '%');
   }
@@ -72,11 +74,27 @@
       var tasks = criticalAssetPromises.concat(imagePromises, [fontPromise, pagePromise, originalTimelinePromise]);
       var completed = 0;
       var total = Math.max(tasks.length, 1);
+      var progressTarget = 8;
+
+      var progressTimer = window.setInterval(function () {
+        var waitingForFinalRender = completed >= total - 1;
+        var idleCeiling = waitingForFinalRender ? 99 : Math.min(92, progressTarget + 3);
+        var elapsedSeconds = (Date.now() - bootStartedAt) / 1000;
+        var timeBasedFloor = Math.min(88, 4 + elapsedSeconds * 4.5);
+        var desiredProgress = Math.max(progressTarget, idleCeiling, timeBasedFloor);
+        if (mobileProgress < desiredProgress) {
+          var distance = desiredProgress - mobileProgress;
+          var step = waitingForFinalRender
+            ? Math.max(.16, distance * .055)
+            : Math.max(.1, distance * .14);
+          setMobileProgress(Math.min(desiredProgress, mobileProgress + step));
+        }
+      }, 120);
 
       tasks.forEach(function (task) {
         Promise.resolve(task).catch(function () {}).then(function () {
           completed += 1;
-          setMobileProgress(8 + (completed / total) * 87);
+          progressTarget = Math.max(progressTarget, 8 + (completed / total) * 87);
         });
       });
 
@@ -84,8 +102,9 @@
       Promise.race([Promise.allSettled(tasks), timeout]).then(function () {
         var minimumDelay = Math.max(0, 900 - (Date.now() - bootStartedAt));
         var renderSettleDelay = 700;
-        setMobileProgress(96);
+        progressTarget = 99;
         window.setTimeout(function () {
+          window.clearInterval(progressTimer);
           setMobileProgress(100);
           window.setTimeout(function () {
             root.classList.add('local-mobile-ready');
