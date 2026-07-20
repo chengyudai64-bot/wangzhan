@@ -18,17 +18,17 @@ Contact 表单在离线版本中只演示提交流程，会跳转到本地 Thank
 
 # wangzhan
 
-## Cloudflare Workers 部署
+## Cloudflare Pages 部署
 
-本仓库已经包含 Cloudflare Workers 静态资源配置：
+本仓库已经包含 Cloudflare Pages 静态资源配置：
 
 - Worker 名称：`wangzhan`
-- 静态资源目录：`site`
-- 部署命令：`npx wrangler deploy`
+- 构建输出目录：`site`
+- 配置字段：`pages_build_output_dir: ./site`
 
-Cloudflare Workers Builds 设置：
+Cloudflare Pages 设置：
 
 - Production branch：`main`
 - Build command：留空
-- Deploy command：`npx wrangler deploy`
+- Build output directory：`site`
 - Root directory：留空

@@ -2,9 +2,5 @@
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "wangzhan",
   "compatibility_date": "2026-07-20",
-  "assets": {
-    "directory": "./site",
-    "html_handling": "auto-trailing-slash",
-    "not_found_handling": "404-page"
-  }
+  "pages_build_output_dir": "./site"
 }
