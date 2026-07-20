@@ -130,7 +130,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
     background:
       linear-gradient(#111118, #111118) 0 0 / var(--local-loading-progress) 100% no-repeat,
       #f3f3ff;
-    transition: background-size .18s linear;
+    will-change: background-size;
+    transition: background-size .08s linear;
   }
 
   /* The independent loader above stays over the original WebGL/GSAP sequence.

@@ -15,7 +15,7 @@
   function setMobileProgress(value) {
     mobileProgress = Math.max(mobileProgress, Math.max(0, Math.min(100, value)));
     var progress = mobileProgress >= 100 ? 100 : Math.floor(mobileProgress);
-    root.style.setProperty('--local-loading-progress', progress + '%');
+    root.style.setProperty('--local-loading-progress', mobileProgress.toFixed(3) + '%');
     root.setAttribute('data-local-loading-label', 'LOADING ' + progress + '%');
   }
 
@@ -85,11 +85,11 @@
         if (mobileProgress < desiredProgress) {
           var distance = desiredProgress - mobileProgress;
           var step = waitingForFinalRender
-            ? Math.max(.16, distance * .055)
-            : Math.max(.1, distance * .14);
+            ? Math.max(.065, distance * .028)
+            : Math.max(.05, distance * .075);
           setMobileProgress(Math.min(desiredProgress, mobileProgress + step));
         }
-      }, 120);
+      }, 60);
 
       tasks.forEach(function (task) {
         Promise.resolve(task).catch(function () {}).then(function () {
