@@ -5,13 +5,20 @@
   });
 
   document.addEventListener('DOMContentLoaded', function () {
+    var isMobile = matchMedia('(max-width: 768px)').matches;
+    if (isMobile) {
+      document.documentElement.classList.add('local-mobile-ready');
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+    }
+
     var loader = document.querySelector('[data-js="loading"]');
     if (loader) {
       window.setTimeout(function () {
         loader.style.opacity = '0';
         loader.style.visibility = 'hidden';
         loader.style.pointerEvents = 'none';
-      }, 1500);
+      }, isMobile ? 0 : 6500);
     }
 
     var revealItems = document.querySelectorAll('[data-js="works-card"], [data-js="index-event-card"]');

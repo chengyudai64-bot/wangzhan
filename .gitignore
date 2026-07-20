@@ -7,6 +7,7 @@ qa/
 *.zip
 cloudflare-*.txt
 compare_live.cjs
+diagnose_mobile.cjs
 inspect_home.cjs
 localize_assets.py
 mirror_site.py

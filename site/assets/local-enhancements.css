@@ -97,8 +97,49 @@ button, a { -webkit-tap-highlight-color: transparent; }
 }
 
 @media (max-width: 768px) {
-  [data-js="index-kv"] { min-height: calc(100svh - 30px); }
-  [data-js="index-kv-images"], [data-js="index-kv-main-image"] { max-width: 100%; }
+  html, body { overflow-x: hidden; }
+
+  /* The original intro is driven by several independent WebGL/GSAP loads. On
+     slower phones the fallback timer could uncover the KV while it was still a
+     narrow clipped strip. Mobile starts from the same stable state that the
+     desktop timeline eventually reaches. */
+  [data-js="loading"] {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+  [data-js="wrapper"],
+  [data-js="outer-frame"],
+  [data-js="header"],
+  [data-js="main"] {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+  [data-js="index-kv"] {
+    min-height: calc(100svh - 30px);
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  [data-js="index-kv-images"] {
+    max-width: 100%;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  [data-js="index-kv-main-image"] {
+    --_progress: 1 !important;
+    max-width: 100%;
+    opacity: 1 !important;
+    clip-path: inset(0) !important;
+    transform: none !important;
+  }
+  [data-js="index-kv-grid"] { opacity: 1 !important; }
+  [data-js="index-kv-dialog-inner"],
+  [data-js="hamburger-button"] {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+  }
   [data-js="works-body"] { min-width: 0; }
   [data-js="works-card"] img { width: 100%; height: auto; }
   input, textarea, select, button { max-width: 100%; }
