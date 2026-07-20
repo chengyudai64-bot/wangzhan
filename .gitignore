@@ -1,0 +1,20 @@
+# Local source captures and development utilities
+1_09 Portfolio.html
+1_09 Portfolio_files/
+1_09 投资组合 --- 1_09 Portfolio.html
+1_09 投资组合 --- 1_09 Portfolio_files/
+qa/
+*.zip
+cloudflare-*.txt
+compare_live.cjs
+inspect_home.cjs
+localize_assets.py
+mirror_site.py
+qa_site.cjs
+verify_site.py
+
+# Dependencies and local Cloudflare state
+node_modules/
+.wrangler/
+.dev.vars
+.env*

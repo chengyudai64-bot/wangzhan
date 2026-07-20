@@ -17,3 +17,18 @@
 Contact 表单在离线版本中只演示提交流程，会跳转到本地 Thanks 页面，不会发送邮件。
 
 # wangzhan
+
+## Cloudflare Workers 部署
+
+本仓库已经包含 Cloudflare Workers 静态资源配置：
+
+- Worker 名称：`wangzhan`
+- 静态资源目录：`site`
+- 部署命令：`npx wrangler deploy`
+
+Cloudflare Workers Builds 设置：
+
+- Production branch：`main`
+- Build command：留空
+- Deploy command：`npx wrangler deploy`
+- Root directory：留空
