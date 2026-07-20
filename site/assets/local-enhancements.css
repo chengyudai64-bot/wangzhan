@@ -1,0 +1,124 @@
+/* Offline runtime enhancements: stable motion and responsive safeguards. */
+:root { --safe-edge: max(15px, env(safe-area-inset-left)); }
+html { scroll-behavior: smooth; }
+body { min-width: 0; }
+img, video, canvas, svg { max-width: 100%; }
+button, a { -webkit-tap-highlight-color: transparent; }
+
+[data-js="main"] { animation: local-page-in .7s cubic-bezier(.22,.8,.28,1) both; }
+
+/* Prevent the interrupted offline loading timeline from leaving the whole hero
+   at 130% scale. The live site ends at an untransformed viewport-sized KV. */
+[data-js="index-kv"] { transform: none !important; }
+
+[data-js="index-kv"]::before,
+[data-js="index-kv"]::after {
+  content: "";
+  position: absolute;
+  z-index: 30;
+  pointer-events: none;
+  background: url('/assets/hero/plush-gray.png') center / contain no-repeat;
+  filter: drop-shadow(15px 20px 7px rgba(0,0,0,.18));
+  opacity: .96;
+  animation: local-blob-float 5.5s ease-in-out infinite alternate;
+}
+[data-js="index-kv"]::before,
+[data-js="index-kv"]::after { display: none; }
+.local-plush-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  pointer-events: none;
+  overflow: hidden;
+  filter: drop-shadow(15px 20px 7px rgba(0,0,0,.18));
+}
+.local-plush-layer { display: none !important; }
+.local-plush {
+  position: absolute;
+  display: block;
+  width: clamp(190px, 13.5vw, 290px);
+  height: auto;
+  opacity: .96;
+  will-change: transform;
+}
+.local-plush--top {
+  left: -18px;
+  top: 72px;
+  transform: rotate(58deg) scale(.88);
+  animation: local-plush-top 6s ease-in-out infinite alternate;
+}
+.local-plush--bottom {
+  width: clamp(230px, 16vw, 340px);
+  left: -36px;
+  bottom: -38px;
+  transform: rotate(-28deg);
+  animation: local-plush-bottom 7.2s ease-in-out infinite alternate;
+}
+[data-js="index-kv"]::before { width: 270px; height: 310px; left: -22px; top: 34px; transform: rotate(58deg) scale(.92); }
+[data-js="index-kv"]::after { width: 330px; height: 390px; left: -42px; bottom: -36px; transform: rotate(-26deg); animation-delay: -2.1s; }
+[data-js="works-card"], [data-js="index-event-card"] {
+  transition: transform .35s cubic-bezier(.2,.8,.2,1), filter .35s ease;
+  will-change: transform;
+}
+@media (hover:hover) and (pointer:fine) {
+  [data-js="works-card"]:hover, [data-js="index-event-card"]:hover {
+    transform: translateY(-8px) rotate(-.4deg);
+    filter: saturate(1.12) contrast(1.04);
+  }
+  a:hover, button:hover { transition: transform .2s ease; }
+}
+
+.local-reveal { opacity: 0; transform: translateY(26px); }
+.local-reveal.local-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity .65s ease, transform .65s cubic-bezier(.2,.75,.2,1);
+}
+
+@keyframes local-page-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes local-window-pop {
+  from { opacity: 0; transform: scale(.82) translateY(18px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes local-blob-float {
+  from { translate: 0 -8px; rotate: -3deg; }
+  to { translate: 10px 10px; rotate: 4deg; }
+}
+@keyframes local-plush-top {
+  from { transform: translate3d(-6px,-8px,0) rotate(54deg) scale(.86); }
+  to { transform: translate3d(12px,10px,0) rotate(63deg) scale(.92); }
+}
+@keyframes local-plush-bottom {
+  from { transform: translate3d(-8px,8px,0) rotate(-32deg) scale(.96); }
+  to { transform: translate3d(14px,-12px,0) rotate(-23deg) scale(1.03); }
+}
+
+@media (max-width: 768px) {
+  [data-js="index-kv"] { min-height: calc(100svh - 30px); }
+  [data-js="index-kv-images"], [data-js="index-kv-main-image"] { max-width: 100%; }
+  [data-js="works-body"] { min-width: 0; }
+  [data-js="works-card"] img { width: 100%; height: auto; }
+  input, textarea, select, button { max-width: 100%; }
+  [data-js="hamburger-button"] { bottom: max(28px, env(safe-area-inset-bottom)); right: var(--safe-edge); }
+  [data-js="index-kv"] a[target="_blank"] { max-width: calc(100vw - 30px); }
+  ._kvSns_1fs6u_62 {
+    padding-bottom: max(7rem, calc(env(safe-area-inset-bottom) + 6rem)) !important;
+    transform: translateX(-10px);
+  }
+  [data-js="index-kv"]::before,
+  [data-js="index-kv"]::after { display: none; }
+  .local-plush-layer { display: none; }
+}
+
+@media (max-width: 430px) {
+  [data-js="works-body"] { padding-bottom: 90px; }
+  [data-js="works-card"] { min-width: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+  .local-reveal { opacity: 1; transform: none; }
+}
