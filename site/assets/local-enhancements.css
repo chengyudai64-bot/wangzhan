@@ -99,10 +99,42 @@ button, a { -webkit-tap-highlight-color: transparent; }
 @media (max-width: 768px) {
   html, body { overflow-x: hidden; }
 
-  /* The original intro is driven by several independent WebGL/GSAP loads. On
-     slower phones the fallback timer could uncover the KV while it was still a
-     narrow clipped strip. Mobile starts from the same stable state that the
-     desktop timeline eventually reaches. */
+  html.local-mobile-loading {
+    --local-loading-progress: 0%;
+    overflow: hidden;
+  }
+  html.local-mobile-loading::before {
+    content: attr(data-local-loading-label);
+    position: fixed;
+    inset: 0;
+    z-index: 2147483646;
+    display: grid;
+    place-items: center;
+    box-sizing: border-box;
+    background: #f3f3ff;
+    color: #111118;
+    font: 18px/1.2 "Courier New", monospace;
+    letter-spacing: .08em;
+  }
+  html.local-mobile-loading::after {
+    content: "";
+    position: fixed;
+    z-index: 2147483647;
+    left: max(28px, env(safe-area-inset-left));
+    right: max(28px, env(safe-area-inset-right));
+    top: calc(50% + 34px);
+    height: 10px;
+    box-sizing: border-box;
+    border: 1px solid #111118;
+    border-radius: 999px;
+    background:
+      linear-gradient(#111118, #111118) 0 0 / var(--local-loading-progress) 100% no-repeat,
+      #f3f3ff;
+    transition: background-size .18s linear;
+  }
+
+  /* The independent loader above stays over the original WebGL/GSAP sequence.
+     The page underneath is locked to its final layout before the cover leaves. */
   [data-js="loading"] {
     display: none !important;
     opacity: 0 !important;
